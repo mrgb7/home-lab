@@ -1,0 +1,42 @@
+---
+- name: Setup K3s Cluster
+  hosts: k3s_cluster
+  become: yes
+  tasks:
+    - name: Install K3s on Master
+      shell: curl -sfL https://get.k3s.io | sh -s - server --disable traefik --node-name master-0 --write-kubeconfig-mode 644
+      when: inventory_hostname in groups['master']
+      args:
+        creates: /usr/local/bin/k3s
+
+    - name: Get K3s Node Token from Master
+      slurp:
+        src: /var/lib/rancher/k3s/server/node-token
+      register: node_token
+      delegate_to: "{{ groups['master'][0] }}"
+      when: inventory_hostname in groups['node']
+
+    - name: Join Worker Nodes to Cluster
+      shell: |
+        curl -sfL https://get.k3s.io | K3S_URL=https://192.168.178.201:6443 \
+        K3S_TOKEN={{ node_token.content | b64decode | trim }} \
+        sh -s - agent --node-name {{ inventory_hostname }}
+      when: inventory_hostname in groups['node']
+      args:
+        creates: /usr/local/bin/k3s
+- name: Configure Local Kubeconfig
+  hosts: master
+  become: yes
+  tasks:
+    - name: Read kubeconfig from master
+      slurp:
+        src: /etc/rancher/k3s/k3s.yaml
+      register: kubeconfig_raw
+
+    - name: Write fixed kubeconfig to local
+      delegate_to: localhost
+      become: no
+      copy:
+        content: "{{ kubeconfig_raw.content | b64decode | replace('127.0.0.1', inventory_hostname) }}"
+        dest: "{{ playbook_dir }}/kubeconfig"
+        mode: '0600'
