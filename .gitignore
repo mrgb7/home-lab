@@ -1,7 +1,7 @@
 # General
 .env
 .direnv/
-
+kubeconfig
 # Terraform
 .terraform/
 *.tfstate
