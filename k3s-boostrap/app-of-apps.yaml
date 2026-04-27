@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:mrgb7/home-lab.git
+    targetRevision: HEAD
+    path: infrastructure # This tells Argo to watch your infra folder
+    directory:
+      recurse: true      # This is the "App of Apps" magic
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
