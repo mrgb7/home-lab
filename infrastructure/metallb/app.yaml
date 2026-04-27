@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: metallb
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
   source:
@@ -16,4 +18,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    createNamespace: true
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
