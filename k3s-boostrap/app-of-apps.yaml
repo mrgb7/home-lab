@@ -8,9 +8,9 @@ spec:
   source:
     repoURL: https://github.com/mrgb7/home-lab.git
     targetRevision: HEAD
-    path: infrastructure # This tells Argo to watch your infra folder
+    path: infrastructure
     directory:
-      recurse: true      # This is the "App of Apps" magic
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
