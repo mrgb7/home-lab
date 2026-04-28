@@ -7,22 +7,16 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
-  source:
-    repoURL: https://charts.longhorn.io
-    chart: longhorn
-    targetRevision: 1.11.1
-    helm:
-      values: |
-        persistence:
-          defaultClass: true
-        defaultSettings:
-          defaultDataPath: /var/lib/longhorn
-          replicaAutoBalance: best-effort
-          storageOverProvisioningPercentage: 200
-        preUpgradeChecker:
-          jobEnabled: false
-        csi:
-          kubeletRootDir: /var/lib/kubelet
+  sources:
+    - repoURL: https://charts.longhorn.io
+      chart: longhorn
+      targetRevision: 1.11.1
+      helm:
+        valueFiles:
+          - $values/infrastructure/longhorn/values.yaml
+    - repoURL: https://github.com/mrgb7/home-lab.git
+      targetRevision: HEAD
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
