@@ -10,4 +10,5 @@ helm upgrade --install argocd argo/argo-cd \
   --namespace argocd \
   --create-namespace \
   -f argocd/extra-config.yaml \
+  --set configs.credentialTemplates.github-creds.password=$GITHUB_TOKEN \
   --set server.externalHostname=argocd.srelab.org
