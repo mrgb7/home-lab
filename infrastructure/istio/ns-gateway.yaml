@@ -1,0 +1,39 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-server-cert
+  namespace: istio-system
+spec:
+  secretName: argocd-server-tls
+  issuerRef:
+    name: le-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - argocd.srelab.org
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: ns-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ns-gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "argocd.srelab.org"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "argocd.srelab.org"
+    tls:
+      mode: SIMPLE
+      credentialName: argocd-server-tls

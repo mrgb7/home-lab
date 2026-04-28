@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: argocd-routing
+  namespace: argocd
+spec:
+  hosts:
+  - "argocd.srelab.org"
+  gateways:
+  - istio-system/ns-gateway
+  http:
+  - route:
+    - destination:
+        host: argocd-server
+        port:
+          number: 80
