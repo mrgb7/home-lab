@@ -1,0 +1,15 @@
+meshConfig:
+  enableTracing: true
+  accessLogFile: /dev/stdout
+  defaultConfig:
+    tracing:
+      sampling: 100
+      zipkin:
+        address: zipkin.istio-system.svc.cluster.local:9411
+
+telemetry:
+  enabled: true
+  v2:
+    enabled: true
+    prometheus:
+      enabled: true
