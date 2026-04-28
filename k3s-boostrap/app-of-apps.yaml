@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: git@github.com:mrgb7/home-lab.git
+    repoURL: https://github.com/mrgb7/home-lab.git
     targetRevision: HEAD
     path: infrastructure # This tells Argo to watch your infra folder
     directory:

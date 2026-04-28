@@ -1,3 +1,6 @@
+# Run discovery to generate config
+./setup-discovery.sh
+
 # Add the Argo Repo
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
@@ -6,5 +9,7 @@ helm repo update
 helm install argocd argo/argo-cd \
   --namespace argocd \
   --create-namespace \
-  --set server.service.type=ClusterIP \
+  -f argocd/extra-config.yaml \
+  --set configs.credentialTemplates.github-creds.password=$GITHUB_TOKEN \
+  --set server.service.type=LoadBalancer \
   --set server.extraArgs={--insecure}
