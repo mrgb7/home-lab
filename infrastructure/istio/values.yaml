@@ -4,8 +4,11 @@ meshConfig:
   defaultConfig:
     tracing:
       sampling: 100
-      zipkin:
-        address: zipkin.istio-system.svc.cluster.local:9411
+  extensionProviders:
+  - name: otel-tracing
+    otel:
+      service: opentelemetry-collector.observability.svc.cluster.local
+      port: 4317
 
 telemetry:
   enabled: true
