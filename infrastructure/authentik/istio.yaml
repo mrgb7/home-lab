@@ -1,0 +1,56 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: authentik-cert
+  namespace: istio-system
+spec:
+  secretName: authentik-tls
+  issuerRef:
+    name: le-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - auth.srelab.org
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: authentik-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ns-gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "auth.srelab.org"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "auth.srelab.org"
+    tls:
+      mode: SIMPLE
+      credentialName: authentik-tls
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: authentik-routing
+  namespace: authentik
+spec:
+  hosts:
+  - "auth.srelab.org"
+  gateways:
+  - istio-system/authentik-gateway
+  http:
+  - route:
+    - destination:
+        host: authentik-server
+        port:
+          number: 80

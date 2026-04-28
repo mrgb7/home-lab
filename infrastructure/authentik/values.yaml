@@ -1,0 +1,21 @@
+authentik:
+  secret_key_secret: authentik-secrets
+  secret_key_key: secret-key
+  postgresql:
+    password_secret: authentik-secrets
+    password_key: postgres-password
+
+postgresql:
+  enabled: true
+  auth:
+    existingSecret: authentik-secrets
+    secretKeys:
+      adminPasswordKey: postgres-password
+      userPasswordKey: postgres-password
+
+redis:
+  enabled: true
+
+server:
+  ingress:
+    enabled: false # We will use native Istio VS/Gateway
