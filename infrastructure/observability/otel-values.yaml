@@ -1,7 +1,7 @@
 mode: deployment
 
 image:
-  repository: "otel/opentelemetry-collector-k8s" # Recommended for K8s deployments
+  repository: "otel/opentelemetry-collector-k8s"
 
 config:
   receivers:
@@ -20,7 +20,7 @@ config:
       spike_limit_percentage: 25
 
   exporters:
-    logging:
+    debug:
       verbosity: basic
 
   service:
@@ -28,7 +28,7 @@ config:
       traces:
         receivers: [otlp]
         processors: [memory_limiter, batch]
-        exporters: [logging]
+        exporters: [debug]
 
 ports:
   otlp:
