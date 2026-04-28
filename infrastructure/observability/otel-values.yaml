@@ -1,5 +1,8 @@
 mode: deployment
 
+image:
+  repository: "otel/opentelemetry-collector-k8s" # Recommended for K8s deployments
+
 config:
   receivers:
     otlp:
@@ -19,10 +22,6 @@ config:
   exporters:
     logging:
       verbosity: basic
-    # Add your actual backend (Tempo, Cloudwatch, etc.) here later
-    # Example:
-    # otlp/backend:
-    #   endpoint: my-backend:4317
 
   service:
     pipelines:
