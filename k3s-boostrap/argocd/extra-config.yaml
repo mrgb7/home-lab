@@ -1,0 +1,14 @@
+configs:
+  credentialTemplates:
+    github-creds:
+      url: https://github.com/mrgb7
+      username: mrgb7
+      type: git
+
+server:
+  service:
+    type: ClusterIP
+  extraArgs:
+    - --insecure
+  ingress:
+    enabled: false # Disabled in favor of Istio Gateway/VirtualService
