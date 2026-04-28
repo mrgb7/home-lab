@@ -22,7 +22,7 @@ spec:
         preUpgradeChecker:
           jobEnabled: false
         csi:
-          kubeletRootDir: /var/lib/kubelet
+          kubeletRootDir: /var/lib/rancher/k3s/agent/kubelet
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
