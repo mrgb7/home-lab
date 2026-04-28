@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   acme:
-    email: your-email@example.com # CHANGE THIS
+    email: ibrahimmohamedragabali@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: le-prod-account-key
