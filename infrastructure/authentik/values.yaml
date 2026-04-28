@@ -12,9 +12,19 @@ postgresql:
     secretKeys:
       adminPasswordKey: postgres-password
       userPasswordKey: postgres-password
+  primary:
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 10Gi
 
 redis:
   enabled: true
+  master:
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 2Gi
 
 server:
   ingress:
