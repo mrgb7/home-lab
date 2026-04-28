@@ -48,7 +48,7 @@ resource "proxmox_virtual_environment_vm" "k3s_nodes" {
   disk {
     datastore_id = "sre-data"
     interface    = "scsi0" # Matches your Template screenshot
-    size         = 20
+    size         = 200
     ssd          = true
     discard      = "on"
   }

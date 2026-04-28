@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://charts.longhorn.io
     chart: longhorn
-    targetRevision: 1.8.1 # Latest stable as of late 2025/early 2026
+    targetRevision: 1.8.1
     helm:
       values: |
         persistence:
@@ -19,6 +19,9 @@ spec:
           defaultDataPath: /var/lib/longhorn
           replicaAutoBalance: best-effort
           storageOverProvisioningPercentage: 200
+          preUpgradeChecker: false
+        csi:
+          kubeletRootDirectory: /var/lib/rancher/k3s/agent/kubelet
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system

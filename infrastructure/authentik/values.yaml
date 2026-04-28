@@ -1,9 +1,15 @@
-authentik:
-  secret_key_secret: authentik-secrets
-  secret_key_key: secret-key
-  postgresql:
-    password_secret: authentik-secrets
-    password_key: postgres-password
+global:
+  env:
+    - name: AUTHENTIK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: authentik-secrets
+          key: secret-key
+    - name: AUTHENTIK_POSTGRESQL__PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-secrets
+          key: postgres-password
 
 postgresql:
   enabled: true
@@ -17,14 +23,6 @@ postgresql:
       enabled: true
       storageClass: longhorn
       size: 10Gi
-
-redis:
-  enabled: true
-  master:
-    persistence:
-      enabled: true
-      storageClass: longhorn
-      size: 2Gi
 
 server:
   ingress:
