@@ -6,5 +6,3 @@ defaultSettings:
   storageOverProvisioningPercentage: 200
 preUpgradeChecker:
   jobEnabled: false
-csi:
-  kubeletRootDir: /var/lib/rancher/k3s/agent/kubelet
