@@ -1,0 +1,96 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: longhorn-ui-cert
+  namespace: istio-system
+spec:
+  secretName: longhorn-ui-tls
+  issuerRef:
+    name: le-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - longhorn.srelab.org
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: longhorn-ui
+  namespace: longhorn-system
+spec:
+  hosts:
+  - "longhorn.srelab.org"
+  gateways:
+  - istio-system/ns-gateway
+  http:
+  - route:
+    - destination:
+        host: longhorn-frontend.longhorn-system.svc.cluster.local
+        port:
+          number: 80
+---
+apiversion: networking.istio.io/v1beta1
+kind: gateway
+metadata:
+  name: longhorn-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ns-gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: http
+    hosts:
+    - "longhorn.srelab.org"
+    tls:
+      httpsredirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: https
+    hosts:
+    - "longhorn.srelab.org"
+    tls:
+      mode: simple
+      credentialname: longhorn-ui-tls
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: longhorn-basic-auth
+  namespace: istio-system
+spec:
+  workloadSelector:
+    labels:
+      istio: ns-gateway
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: GATEWAY
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+            subFilter:
+              name: "envoy.filters.http.router"
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.filters.http.lua
+        typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua"
+          inline_code: |
+            function envoy_on_request(request_handle)
+              local host = request_handle:headers():get("Host")
+              if host == "longhorn.srelab.org" then
+                local auth = request_handle:headers():get("Authorization")
+                if auth == nil or auth ~= "Basic YWRtaW46YWRtaW4=" then
+                   request_handle:respond(
+                     {[":status"] = "401", ["WWW-Authenticate"] = "Basic realm=\"Longhorn UI\""},
+                     "Authentication Required"
+                   )
+                end
+              end
+            end

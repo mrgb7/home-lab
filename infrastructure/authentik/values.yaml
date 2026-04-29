@@ -10,6 +10,8 @@ global:
         secretKeyRef:
           name: authentik-secrets
           key: postgres-password
+    - name: AUTHENTIK_BOOTSTRAP_PASSWORD
+      value: "admin"
 
 postgresql:
   enabled: true

@@ -4,6 +4,17 @@ configs:
       url: https://github.com/mrgb7
       username: mrgb7
       type: git
+  cm:
+    url: https://argocd.srelab.org
+    oidc.config: |
+      name: Authentik
+      issuer: https://auth.srelab.org/application/o/argocd/
+      clientID: argocd
+      clientSecret: $oidc.authentik.clientSecret
+      requestedScopes: ["openid", "profile", "email", "groups"]
+  rbac:
+    policy.csv: |
+      g, authentik_admins, role:admin
 
 server:
   service:
@@ -12,3 +23,15 @@ server:
     - --insecure
   ingress:
     enabled: false # Disabled in favor of Istio Gateway/VirtualService
+  hostAliases:
+    - ip: "192.168.178.210"
+      hostnames:
+        - "auth.srelab.org"
+        - "argocd.srelab.org"
+
+dex:
+  hostAliases:
+    - ip: "192.168.178.210"
+      hostnames:
+        - "auth.srelab.org"
+        - "argocd.srelab.org"

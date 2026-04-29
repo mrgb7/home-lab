@@ -4,5 +4,7 @@ defaultSettings:
   defaultDataPath: /var/lib/longhorn
   replicaAutoBalance: best-effort
   storageOverProvisioningPercentage: 200
+csi:
+  kubeletRootDir: /var/lib/kubelet
 preUpgradeChecker:
   jobEnabled: false
