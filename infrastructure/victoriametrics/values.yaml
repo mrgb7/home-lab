@@ -1,0 +1,17 @@
+fullnameOverride: "victoria-metrics"
+
+# VictoriaMetrics K8s Stack Values
+vmsingle:
+  enabled: false
+
+vmcluster:
+  enabled: true
+
+grafana:
+  enabled: false
+
+alertmanager:
+  enabled: false
+
+vlogs:
+  enabled: false
