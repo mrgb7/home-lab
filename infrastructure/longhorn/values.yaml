@@ -7,4 +7,4 @@ defaultSettings:
 preUpgradeChecker:
   jobEnabled: false
 csi:
-  kubeletRootDir: /var/lib/rancher/k3s/agent/kubelet
+  kubeletRootDir: /var/lib/kubelet
