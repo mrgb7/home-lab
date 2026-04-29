@@ -1,25 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: longhorn
+  name: otel-collector
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   project: default
   sources:
-    - repoURL: https://charts.longhorn.io
-      chart: longhorn
-      targetRevision: 1.11.1
+    - repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
+      chart: opentelemetry-collector
+      targetRevision: 0.152.0
       helm:
         valueFiles:
-          - $values/infrastructure/longhorn/values.yaml
+          - $values/infrastructure/values/observability/otel-values.yaml
     - repoURL: https://github.com/mrgb7/home-lab.git
       targetRevision: HEAD
       ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: longhorn-system
+    namespace: observability
   syncPolicy:
     automated:
       prune: true

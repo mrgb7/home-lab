@@ -13,10 +13,13 @@ spec:
       targetRevision: 2026.2.2
       helm:
         valueFiles:
-          - $values/infrastructure/authentik/values.yaml
+          - $values/infrastructure/values/authentik/values.yaml
     - repoURL: https://github.com/mrgb7/home-lab.git
       targetRevision: HEAD
       ref: values
+    - repoURL: https://github.com/mrgb7/home-lab.git
+      targetRevision: HEAD
+      path: infrastructure/additional-resources/authentik
   destination:
     server: https://kubernetes.default.svc
     namespace: authentik
