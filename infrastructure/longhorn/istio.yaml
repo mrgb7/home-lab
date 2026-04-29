@@ -28,8 +28,8 @@ spec:
         port:
           number: 80
 ---
-apiversion: networking.istio.io/v1beta1
-kind: gateway
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
 metadata:
   name: longhorn-gateway
   namespace: istio-system
@@ -40,20 +40,20 @@ spec:
   - port:
       number: 80
       name: http
-      protocol: http
+      protocol: HTTP
     hosts:
     - "longhorn.srelab.org"
     tls:
-      httpsredirect: true
+      httpsRedirect: true
   - port:
       number: 443
       name: https
-      protocol: https
+      protocol: HTTPS
     hosts:
     - "longhorn.srelab.org"
     tls:
-      mode: simple
-      credentialname: longhorn-ui-tls
+      mode: SIMPLE
+      credentialName: longhorn-ui-tls
 
 ---
 apiVersion: networking.istio.io/v1alpha3

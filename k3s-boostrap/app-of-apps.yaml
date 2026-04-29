@@ -11,6 +11,7 @@ spec:
     path: infrastructure
     directory:
       recurse: true
+      exclude: '{**/*values.yaml,**/.gitkeep}'
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
