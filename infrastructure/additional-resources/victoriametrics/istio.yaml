@@ -1,3 +1,4 @@
+## --- VMAlert ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -54,3 +55,61 @@ spec:
         host: vmalert-victoria-metrics.victoria-metrics.svc.cluster.local
         port:
           number: 8080
+---
+## --- Grafana ---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-cert
+  namespace: istio-system
+spec:
+  secretName: grafana-tls
+  issuerRef:
+    name: le-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - grafana.srelab.org
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: grafana-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ns-gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "grafana.srelab.org"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "grafana.srelab.org"
+    tls:
+      mode: SIMPLE
+      credentialName: grafana-tls
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: grafana-routing
+  namespace: victoria-metrics
+spec:
+  hosts:
+  - "grafana.srelab.org"
+  gateways:
+  - istio-system/grafana-gateway
+  http:
+  - route:
+    - destination:
+        host: victoria-metrics-grafana.victoria-metrics.svc.cluster.local
+        port:
+          number: 80
