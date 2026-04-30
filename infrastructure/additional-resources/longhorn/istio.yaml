@@ -20,7 +20,7 @@ spec:
   hosts:
   - "longhorn.srelab.org"
   gateways:
-  - istio-system/ns-gateway
+  - istio-system/longhorn-gateway
   http:
   - route:
     - destination:

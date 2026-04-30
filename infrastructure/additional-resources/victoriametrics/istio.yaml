@@ -1,3 +1,61 @@
+## --- VictoriaLogs ---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: victorialogs-cert
+  namespace: istio-system
+spec:
+  secretName: victorialogs-tls
+  issuerRef:
+    name: le-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - victorialogs.srelab.org
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: victorialogs-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ns-gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "victorialogs.srelab.org"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "victorialogs.srelab.org"
+    tls:
+      mode: SIMPLE
+      credentialName: victorialogs-tls
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: victorialogs-routing
+  namespace: victoria-metrics
+spec:
+  hosts:
+  - "victorialogs.srelab.org"
+  gateways:
+  - istio-system/victorialogs-gateway
+  http:
+  - route:
+    - destination:
+        host: victoria-logs-victoria-logs-cluster-vlselect.victoria-metrics.svc.cluster.local
+        port:
+          number: 9471
+---
 ## --- VMAlert ---
 apiVersion: cert-manager.io/v1
 kind: Certificate

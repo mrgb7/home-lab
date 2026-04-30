@@ -1,0 +1,16 @@
+remoteWrite:
+  - url: http://vlagent-vlagent.victoria-metrics.svc.cluster.local:9429
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+podSecurityContext:
+  enabled: true
+
+securityContext:
+  enabled: true

@@ -1,0 +1,19 @@
+apiVersion: operator.victoriametrics.com/v1
+kind: VLAgent
+metadata:
+  name: vlagent
+  namespace: victoria-metrics
+spec:
+  replicaCount: 1
+  logFormat: json
+  remoteWrite:
+    - url: "http://victoria-logs-victoria-logs-cluster-vlinsert.victoria-metrics.svc.cluster.local:9481/internal/insert"
+  extraArgs:
+    remoteWrite.tmpDataPath: /tmp/vlagent-buffer
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
