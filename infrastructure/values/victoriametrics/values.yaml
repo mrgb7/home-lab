@@ -128,29 +128,7 @@ vmalert:
 
 # --- Alertmanager (required as VMAlert notifier) ---
 alertmanager:
-  enabled: true
-  spec:
-    replicaCount: 1
-    port: "9093"
-    selectAllByDefault: true
-    image:
-      tag: v0.28.1
-    resources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        cpu: 200m
-        memory: 128Mi
-  config:
-    route:
-      receiver: "blackhole"
-      group_wait: 30s
-      group_interval: 5m
-      repeat_interval: 12h
-    receivers:
-      - name: blackhole
-
+  enabled: false
 grafana:
   enabled: true
   persistence:
