@@ -108,25 +108,8 @@ vmagent:
 
 # --- VMAlert (alerting & recording rules) ---
 vmalert:
-  enabled: true
-  remoteWriteVMAgent: true
-  spec:
-    port: "8080"
-    selectAllByDefault: true
-    evaluationInterval: 30s
-    extraArgs:
-      http.pathPrefix: "/"
-    externalLabels:
-      cluster: home-lab
-    resources:
-      requests:
-        cpu: 50m
-        memory: 128Mi
-      limits:
-        cpu: 500m
-        memory: 256Mi
-
-# --- Alertmanager (required as VMAlert notifier) ---
+  enabled: false
+ # --- Alertmanager (required as VMAlert notifier) ---
 alertmanager:
   enabled: false
 grafana:
