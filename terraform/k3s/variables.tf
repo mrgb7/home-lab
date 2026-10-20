@@ -13,3 +13,7 @@ variable "ssh_public_key" {
   type        = string
   description = "Your public SSH key for VM access"
 }
+variable "proxmox_machine_host" {
+type        = string
+description = "IP address of your host machine"
+}
